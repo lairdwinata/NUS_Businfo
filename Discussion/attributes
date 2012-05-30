@@ -1,0 +1,159 @@
+-. Object: busstops
+
+    attribute               | type                             | comment
+    ------------------------------------------------------------------------------------------------------------------------------------
+	gid                     | integer                          | Primary Key & Unique
+  	code                    | character varying(80),           | bus stop code
+  	name                    | character varying(80),           | bus stop name
+  	tags                    | text,                            | keywords to help with searching for bus stops
+  	direction               | character varying(80),           |
+  	bus_no                  | character varying(80),           | all the buses that stops at this particular bus stop (semi-colon-separated)
+  	the_geom                | geometry(Point),                 |
+
+	ex:
+		gid = 1
+		code = 'BS_16199'
+		name = 'NUS Faculty Of Design and Envi'
+		tags = 'SDE busstop'
+		direction = 'towards XX road'
+		bus_no = '33; 51; 183; 188;'
+
+-. Object: carparks
+
+    attribute               | type                             | comment
+    ------------------------------------------------------------------------------------------------------------------------------------
+  	gid                     | integer                          | Primary Key & Unique
+  	code                    | character varying(80),           |
+  	name                    | character varying(80),           |
+  	tags                    | text,                            |
+  	authtype                | character varying(80),           | staff/student/visitor/club member
+	rates                   | text,                            |
+  	the_geom                | geometry(Point),                 |
+
+	ex:
+		gid = 1
+		code = 'NUS_CP_1'
+		name = 'CARPARK1'
+		tags = 'SDE; School of Design & Environment;'
+		authtype = 'Staff'
+		rates = '0.01/hour on weekends'
+
+-. Object: floors
+
+    attribute               | type                             | comment
+    ------------------------------------------------------------------------------------------------------------------------------------
+    gid                     | integer                          | Primary Key & Unique
+    code                    | character varying(80),           |
+    name                    | character varying(80),           |
+    tags                    | text,                            |
+    building                | character varying(80),           |
+    floor                   | character varying(80),           | B1/01/02/roof
+    class                   | character varying(80),           |
+    level                   | integer,                         | correspond with zoom level (CCE bus stop is level 0)
+    misc                    | text,                            |
+    the_geom                | geometry(Polygon),               |
+
+	ex:
+		gid = 1
+		code = 'NUS_CCE_01'
+		name = 'Computer Center Floor 1'
+		tags  = 'CCE 1; Computer Center 1; CCE 01; CCE Floor 1; CCE Level 1;'
+		building = 'CCE'
+		floor = '01'
+        class = NULL
+		level = 0
+        misc = NULL
+
+-. Object: rooms
+
+
+    attribute               | type                             | comment
+    ------------------------------------------------------------------------------------------------------------------------------------
+    gid                     | integer                          | Primary Key & Unique
+    code                    | character varying(80),           |
+    name                    | character varying(80),           |
+    tags                    | text,                            |
+    building                | character varying(80),           |
+    floor                   | character varying(80),           |
+    class                   | character varying(80),           |
+    level                   | integer,                         |
+    authtype                | text,                            |
+    entry_point             | character varying(80),           | alternative entry point to the particular room, example: front desk.
+    misc                    | text,                            |
+    the_geom                | geometry(Polygon),               |
+
+	ex:
+        gid = 1
+        code = 'NUS_E4_06_12'
+        name = 'E4-06-12'
+        tags = 'E4-06-12; E4 Floor 6 Room 12; Comms Lab; CNDS;'	
+        building = 'E4'
+        floor = '06'
+        class = 'Laboratory'
+        level = 3
+        authtype = 'Card access; Key access;'
+        entry_point = 'NUS_E4_06_12'
+        misc = NULL
+
+-. Object: linkways
+
+    attribute               | type                             | comment
+    ------------------------------------------------------------------------------------------------------------------------------------
+    gid                     | integer                          | Primary Key & Unique
+    code                    | character varying(80),           |
+    name                    | character varying(80),           |
+    building                | character varying(80),           |
+    floor                   | character varying(80),           |
+    class                   | character varying(80),           |
+    level                   | integer,                         |
+    misc                    | text,                            |
+    the_geom                | geometry(Polygon),               |
+
+	ex:
+        gid = 1
+        code = 'NUS_E4_STR_1'
+        name = 'E4-04 Staircase 1'
+        building = 'E4'
+        floor = '04'
+        level = 3
+        misc = NULL
+
+-. Object: routes
+
+    attribute               | type                             | comment
+    ------------------------------------------------------------------------------------------------------------------------------------
+    gid                     | integer                          | Primary Key & Unique
+    source                  | integer,                         | Unique
+    target                  | integer,                         | Unique
+    cost                    | double precision,                | LEAVE THIS BLANK
+    reverse_cost            | double precision,                | LEAVE THIS BLANK
+    length                  | double precision,                | LEAVE THIS BLANK
+    oneway                  | "char",                          | Y/N
+    inst                    | text,                            | {<edge_gid>:<instructional text>;}
+    feature                 | text,                            | covered/wheelchair-access/etc
+    building                | character varying(80),           |
+    floor                   | character varying(80),           |
+    class                   | character varying(80),           | walkway/ramp/stairs/lifts
+    level                   | integer,                         |
+    source_type             | character varying(80),           | Point-Of-Interest code or blank
+    target_type             | character varying(80),           | Point-Of-Interest code or blank
+    misc                    | text,                            |
+    the_geom                | geometry(LineString),            |
+
+	ex:
+        gid = 1
+        source = 59
+        target = 118
+        cost = 3.70269
+        reverse_cost = 3.70269
+        length = 3.70269
+        oneway = 'N'
+        class = 'walkway'
+        inst = '98: Take the STAIRS UP to Engineering 4 Level 5 and Turn RIGHT; 97: Take the STAIRS UP to Engineering 4 Level 5 and Turn LEFT; 125: Take the STAIRS down to Engineering 4 Level 4;'
+        feature = 'covered; wheelchair-accessible;'
+        building = 'E4'
+        floor = '04'
+        level = 2
+        source_type = 'NUS_E4_STR_1'
+        target_type = NULL
+        misc = NULL
